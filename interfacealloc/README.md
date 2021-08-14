@@ -30,5 +30,8 @@ Or I would have expected that no such optimization exists, so that every boxing
 operation results in allocation. 
 
 What we actually see is that there is some kind of optimization like this happening
-but only for `byte`. Super weird! It can't be that common to box a single byte.
+but only for `byte`. 
 
+Further investigation (in `byte/byte.go`) shows the reason for this: the Go runtime
+pre-allocates pointers to all actual byte values (there are only 256 of them) and
+then re-uses these pointers when it needs a pointer to a byte.
